@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Tripline — Dashboard{% endblock %}
+
+{% block splash %}
+<div id="splash">
+  <div class="splash-inner">
+    <svg class="splash-route" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 60 C 40 60, 40 20, 74 20 S 130 60, 160 60 S 190 30, 196 20" />
+      <circle cx="196" cy="20" r="4" />
+    </svg>
+    <div class="splash-word">TRIPLINE</div>
+    <div class="splash-tag">starting up the ledger…</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% if flash == "logged" %}
+  <div class="toast">Trip logged.</div>
+{% elif flash == "updated" %}
+  <div class="toast">Trip updated.</div>
+{% endif %}
+
+<section class="dashboard-cluster">
+  <div class="panel panel-gauge">
+    <svg class="gauge-svg" viewBox="0 0 220 130">
+      <path class="gauge-track" d="M 20 110 A 90 90 0 0 1 200 110" />
+      <path class="gauge-zone poor" d="M 20 110 A 90 90 0 0 1 135.33 23.64" />
+      <path class="gauge-zone average" d="M 135.33 23.64 A 90 90 0 0 1 168.94 42.0" />
+      <path class="gauge-zone good" d="M 168.94 42.0 A 90 90 0 0 1 200 110" />
+      <line class="gauge-needle" x1="110" y1="110" x2="{{ needle_x }}" y2="{{ needle_y }}" />
+      <circle class="gauge-pivot" cx="110" cy="110" r="5" />
+    </svg>
+    <div class="gauge-readout">
+      <span class="stat-label">Avg Efficiency</span>
+      <span class="gauge-value">{{ avg_efficiency }}<span class="unit"> km/l</span></span>
+    </div>
+  </div>
+
+  <div class="panel panel-stat">
+    <span class="stat-label">Trips Shown</span>
+    <span class="stat-value">{{ total_records }}</span>
+  </div>
+
+  <div class="panel panel-stat">
+    <span class="stat-label">Fuel Logged</span>
+    <span class="stat-value">{{ total_fuel }}<span class="unit">L</span></span>
+  </div>
+
+  <div class="panel panel-stat">
+    <span class="stat-label">Fleet Size</span>
+    <span class="stat-value">{{ fleet_count }}<span class="unit">vehicles</span></span>
+  </div>
+</section>
+
+<section class="controls-bar">
+  <form method="get" action="/">
+    <input
+      class="field-input search-input"
+      type="text"
+      name="search"
+      placeholder="Search vehicle or driver…"
+      value="{{ search }}"
+    >
+    <select class="field-input vehicle-select" name="vehicle" onchange="this.form.submit()">
+      <option value="">All vehicles</option>
+      {% for v in vehicles %}
+        <option value="{{ v.vehicle_no }}" {% if v.vehicle_no == vehicle %}selected{% endif %}>
+          {{ v.vehicle_no }}
+        </option>
+      {% endfor %}
+    </select>
+    <button class="btn btn-ghost" type="submit">Filter</button>
+  </form>
+</section>
+
+<section class="table-wrap">
+  {% if records|length == 0 %}
+    <div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 12 C 3 12, 8 6, 12 12 S 21 12, 21 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <circle cx="21" cy="12" r="1.4" fill="currentColor"/>
+      </svg>
+      {% if search or vehicle %}
+        <h3>No trips match this search</h3>
+        <p>Try a different vehicle number, driver name, or clear the filter.</p>
+        <a href="/" class="btn btn-ghost">Clear filter</a>
+      {% else %}
+        <h3>No trips logged yet</h3>
+        <p>Log your first trip to start tracking distance, fuel, and efficiency across the fleet.</p>
+        <a href="/add" class="btn btn-primary">Log your first trip</a>
+      {% endif %}
+    </div>
+  {% else %}
+    <table>
+      <thead>
+        <tr>
+          <th>Vehicle</th>
+          <th>Date</th>
+          <th>Driver</th>
+          <th>Start → End KM</th>
+          <th>Distance</th>
+          <th>Fuel</th>
+          <th>Efficiency</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td data-label="Vehicle" class="cell-vehicle">{{ r.vehicle_no }}</td>
+          <td data-label="Date" class="cell-muted">{{ r.trip_date }}</td>
+          <td data-label="Driver">{{ r.driver }}</td>
+          <td data-label="Start → End" class="cell-km">{{ r.start_km }} → {{ r.end_km }}</td>
+          <td data-label="Distance" class="cell-km">{{ r.distance }} km</td>
+          <td data-label="Fuel" class="cell-km">{{ r.fuel_litres }} L</td>
+          <td data-label="Efficiency">
+            <div class="eff-cell">
+              <span class="eff-value">{{ r.efficiency }} km/l</span>
+              <div class="eff-bar-track">
+                <div class="eff-bar-fill {{ r.status|lower }}" style="width: {{ [r.efficiency / gauge_max * 100, 100] | min }}%;"></div>
+              </div>
+            </div>
+          </td>
+          <td data-label="Status"><span class="status-badge {{ r.status|lower }}">{{ r.status }}</span></td>
+          <td data-label=""><a href="/edit/{{ r.record_id }}" class="edit-link">Edit</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+</section>
+
+{% endblock %}

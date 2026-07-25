@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Off route — Tripline{% endblock %}
+
+{% block content %}
+<div class="message-screen">
+  <div class="message-panel lost">
+    <div class="icon-ring">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 17 C 3 17, 8 8, 12 14 S 20 8, 21 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-dasharray="3 3"/>
+        <circle cx="21" cy="6" r="1.6" fill="currentColor"/>
+      </svg>
+    </div>
+    <h1>This route doesn't exist</h1>
+    <p>There's no trip or page at this address. Check the link, or head back to the dashboard.</p>
+    <div class="message-actions">
+      <a href="/" class="btn btn-primary">Back to dashboard</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

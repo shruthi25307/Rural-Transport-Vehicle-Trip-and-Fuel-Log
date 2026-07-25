@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Tripline{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  {% block splash %}{% endblock %}
+
+  <div class="app-shell">
+    <header class="topbar">
+      <a href="/" class="brand" style="text-decoration:none;">
+        <svg class="brand-mark" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="17" cy="17" r="15.5" stroke="#2a323c" stroke-width="2"/>
+          <path d="M6 20 A 11 11 0 0 1 28 20" stroke="#4fa9ff" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="17" y1="20" x2="23" y2="12" stroke="#edeff2" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="17" cy="20" r="2" fill="#edeff2"/>
+        </svg>
+        <span class="brand-text">
+          <span class="brand-name">TRIPLINE</span>
+          <span class="brand-tag">Fleet trip &amp; fuel ledger</span>
+        </span>
+      </a>
+      <nav class="nav-links">
+        <a href="/" class="btn btn-ghost">Dashboard</a>
+        <a href="/add" class="btn btn-primary">+ Log Trip</a>
+      </nav>
+    </header>
+
+    {% block content %}{% endblock %}
+  </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
