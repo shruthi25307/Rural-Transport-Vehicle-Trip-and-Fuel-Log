@@ -2,7 +2,7 @@
 
 🌐 **Live Demo:** https://rural-transport-vehicle-trip-and-fuel-log.onrender.com/
 ## 🎥 Demo Video
-[Download / View the Demo Video]()
+[Download / View the Demo Video](https://github.com/shruthi25307/Rural-Transport-Vehicle-Trip-and-Fuel-Log/blob/main/SIH_2026.mp4)
 
 A Flask-based web application designed to simplify vehicle trip management and fuel usage tracking for rural transportation services. The system enables transport operators to record trip details, monitor fuel consumption, and maintain organized travel logs for better operational efficiency.
 
