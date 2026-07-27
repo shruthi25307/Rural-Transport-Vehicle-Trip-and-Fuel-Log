@@ -1,6 +1,7 @@
 # 🚛 Rural Transport Vehicle Trip & Fuel Log
 
 🌐 **Live Demo:** https://rural-transport-vehicle-trip-and-fuel-log.onrender.com/
+**LEVEL 2:** https://rural-transport-vehicle-trip-and-fuel.onrender.com/
 
 ## 🎥 Demo Video
 
