@@ -9,37 +9,31 @@
     <h1 class="page-title">{% if record %}Edit trip #{{ record.record_id }}{% else %}Log a new trip{% endif %}</h1>
     <p class="page-subtitle">
       {% if record %}
-        Update the odometer readings and fuel used — the efficiency reading recalculates automatically.
+      Update the odometer readings and fuel used — the efficiency reading recalculates automatically.
       {% else %}
-        Enter the odometer readings and fuel used. Tripline works out distance, efficiency, and status for you.
+      Enter the odometer readings and fuel used. Tripline works out distance, efficiency, and status for you.
       {% endif %}
     </p>
 
-    <form
-      id="trip-form"
-      method="post"
-      action="{% if record %}/edit/{{ record.record_id }}{% else %}/add{% endif %}"
-      data-good="{{ gauge_good }}"
-      data-average="{{ gauge_average }}"
-    >
+    <form id="trip-form" method="post" action="{% if record %}/edit/{{ record.record_id }}{% else %}/add{% endif %}"
+      data-good="{{ gauge_good }}" data-average="{{ gauge_average }}">
       <div class="form-row">
         <div class="field">
           <label for="vehicle_no">Vehicle number</label>
           <input type="text" id="vehicle_no" name="vehicle_no" placeholder="TN01AB1234"
-                 value="{{ record.vehicle_no if record else '' }}" required>
+            value="{{ record.vehicle_no if record else '' }}" required>
         </div>
         <div class="field">
           <label for="driver">Driver</label>
           <input type="text" id="driver" name="driver" placeholder="Driver name"
-                 value="{{ record.driver if record else '' }}" required>
+            value="{{ record.driver if record else '' }}" required>
         </div>
       </div>
 
       <div class="form-row">
         <div class="field full">
           <label for="trip_date">Trip date</label>
-          <input type="date" id="trip_date" name="trip_date"
-                 value="{{ record.trip_date if record else '' }}" required>
+          <input type="date" id="trip_date" name="trip_date" value="{{ record.trip_date if record else '' }}" required>
         </div>
       </div>
 
@@ -47,13 +41,13 @@
         <div class="field">
           <label for="start_km">Start KM</label>
           <input type="number" id="start_km" name="start_km" placeholder="0"
-                 value="{{ record.start_km if record else '' }}" required>
+            value="{{ record.start_km if record else '' }}" required>
           <span class="field-hint" id="km-hint"></span>
         </div>
         <div class="field">
           <label for="end_km">End KM</label>
-          <input type="number" id="end_km" name="end_km" placeholder="0"
-                 value="{{ record.end_km if record else '' }}" required>
+          <input type="number" id="end_km" name="end_km" placeholder="0" value="{{ record.end_km if record else '' }}"
+            required>
         </div>
       </div>
 
@@ -61,8 +55,15 @@
         <div class="field full">
           <label for="fuel_litres">Fuel used (litres)</label>
           <input type="number" step="0.01" id="fuel_litres" name="fuel_litres" placeholder="0.0"
-                 value="{{ record.fuel_litres if record else '' }}" required>
+            value="{{ record.fuel_litres if record else '' }}" required>
           <span class="field-hint" id="fuel-hint"></span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field full">
+          <label for="remarks">Remarks</label>
+          <input type="text" id="remarks" name="remarks" placeholder="Enter remarks"
+            value="{{ record.remarks if record else '' }}">
         </div>
       </div>
 

@@ -42,7 +42,9 @@ def create_table():
         fuel_litres REAL,
         driver TEXT,
         efficiency REAL,
-        status TEXT
+        status TEXT,
+        remarks TEXT,
+        UNIQUE(vehicle_no, trip_date)
     )
     """)
 
@@ -131,6 +133,7 @@ def add_record():
         end_km = int(request.form["end_km"])
         fuel_litres = float(request.form["fuel_litres"])
         driver = request.form["driver"]
+        remarks = request.form["remarks"]
 
         if end_km <= start_km:
             return render_template(
@@ -156,36 +159,49 @@ def add_record():
 
         conn = get_db()
 
-        conn.execute("""
-        INSERT INTO records(
-            vehicle_no,
-            trip_date,
-            start_km,
-            end_km,
-            distance,
-            fuel_litres,
-            driver,
-            efficiency,
-            status
-        )
-        VALUES(?,?,?,?,?,?,?,?,?)
-        """,
-        (
-            vehicle_no,
-            trip_date,
-            start_km,
-            end_km,
-            distance,
-            fuel_litres,
-            driver,
-            efficiency,
-            status
-        ))
+        try:
 
-        conn.commit()
-        conn.close()
+            conn.execute("""
+            INSERT INTO records(
+                vehicle_no,
+                trip_date,
+                start_km,
+                end_km,
+                distance,
+                fuel_litres,
+                driver,
+                efficiency,
+                status,
+                remarks
+            )
+            VALUES(?,?,?,?,?,?,?,?,?,?)
+            """,
+            (
+                vehicle_no,
+                trip_date,
+                start_km,
+                end_km,
+                distance,
+                fuel_litres,
+                driver,
+                efficiency,
+                status,
+                remarks
+            ))
 
-        return redirect("/?flash=logged")
+            conn.commit()
+            conn.close()
+
+            return redirect("/?flash=logged")
+
+        except sqlite3.IntegrityError:
+
+            conn.close()
+
+            return render_template(
+                "error.html",
+                message="A record for this vehicle and date already exists."
+            )
 
     return render_template(
         "form.html",
@@ -193,7 +209,6 @@ def add_record():
         gauge_good=GAUGE_GOOD,
         gauge_average=GAUGE_AVERAGE
     )
-
 
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit_record(id):
@@ -217,6 +232,7 @@ def edit_record(id):
         end_km = int(request.form["end_km"])
         fuel_litres = float(request.form["fuel_litres"])
         driver = request.form["driver"]
+        remarks = request.form["remarks"]
 
         if end_km <= start_km:
             conn.close()
@@ -243,31 +259,33 @@ def edit_record(id):
             status = "Poor"
 
         conn.execute("""
-        UPDATE records
-        SET
-            vehicle_no=?,
-            trip_date=?,
-            start_km=?,
-            end_km=?,
-            distance=?,
-            fuel_litres=?,
-            driver=?,
-            efficiency=?,
-            status=?
-        WHERE record_id=?
-        """,
-        (
-            vehicle_no,
-            trip_date,
-            start_km,
-            end_km,
-            distance,
-            fuel_litres,
-            driver,
-            efficiency,
-            status,
-            id
-        ))
+UPDATE records
+SET
+    vehicle_no=?,
+    trip_date=?,
+    start_km=?,
+    end_km=?,
+    distance=?,
+    fuel_litres=?,
+    driver=?,
+    efficiency=?,
+    status=?,
+    remarks=?
+WHERE record_id=?
+""",
+(
+    vehicle_no,
+    trip_date,
+    start_km,
+    end_km,
+    distance,
+    fuel_litres,
+    driver,
+    efficiency,
+    status,
+    remarks,
+    id
+))
 
         conn.commit()
         conn.close()

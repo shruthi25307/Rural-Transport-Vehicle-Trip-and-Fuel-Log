@@ -104,32 +104,45 @@
           <th>Distance</th>
           <th>Fuel</th>
           <th>Efficiency</th>
+          <th>Remarks</th>
           <th>Status</th>
           <th></th>
         </tr>
       </thead>
-      <tbody>
-        {% for r in records %}
-        <tr>
-          <td data-label="Vehicle" class="cell-vehicle">{{ r.vehicle_no }}</td>
-          <td data-label="Date" class="cell-muted">{{ r.trip_date }}</td>
-          <td data-label="Driver">{{ r.driver }}</td>
-          <td data-label="Start → End" class="cell-km">{{ r.start_km }} → {{ r.end_km }}</td>
-          <td data-label="Distance" class="cell-km">{{ r.distance }} km</td>
-          <td data-label="Fuel" class="cell-km">{{ r.fuel_litres }} L</td>
-          <td data-label="Efficiency">
-            <div class="eff-cell">
-              <span class="eff-value">{{ r.efficiency }} km/l</span>
-              <div class="eff-bar-track">
-                <div class="eff-bar-fill {{ r.status|lower }}" style="width: {{ [r.efficiency / gauge_max * 100, 100] | min }}%;"></div>
-              </div>
-            </div>
-          </td>
-          <td data-label="Status"><span class="status-badge {{ r.status|lower }}">{{ r.status }}</span></td>
-          <td data-label=""><a href="/edit/{{ r.record_id }}" class="edit-link">Edit</a></td>
-        </tr>
-        {% endfor %}
-      </tbody>
+    <tbody>
+  {% for r in records %}
+  <tr>
+    <td data-label="Vehicle" class="cell-vehicle">{{ r.vehicle_no }}</td>
+    <td data-label="Date" class="cell-muted">{{ r.trip_date }}</td>
+    <td data-label="Driver">{{ r.driver }}</td>
+    <td data-label="Start → End" class="cell-km">{{ r.start_km }} → {{ r.end_km }}</td>
+    <td data-label="Distance" class="cell-km">{{ r.distance }} km</td>
+    <td data-label="Fuel" class="cell-km">{{ r.fuel_litres }} L</td>
+
+    <td data-label="Efficiency">
+      <div class="eff-cell">
+        <span class="eff-value">{{ r.efficiency }} km/l</span>
+        <div class="eff-bar-track">
+          <div class="eff-bar-fill {{ r.status|lower }}">
+          </div>
+        </div>
+      </div>
+    </td>
+
+    <td data-label="Remarks">{{ r.remarks }}</td>
+
+    <td data-label="Status">
+      <span class="status-badge {{ r.status|lower }}">
+        {{ r.status }}
+      </span>
+    </td>
+
+    <td data-label="">
+      <a href="/edit/{{ r.record_id }}" class="edit-link">Edit</a>
+    </td>
+  </tr>
+  {% endfor %}
+</tbody>
     </table>
   {% endif %}
 </section>
